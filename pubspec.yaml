@@ -27,6 +27,10 @@ dependencies:
   # For using uuid
   uuid: 2.0.4
 
+  intl: ^0.16.0
+  datetime_picker_formfield: ^1.0.0
+
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

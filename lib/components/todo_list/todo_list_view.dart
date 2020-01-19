@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:simple_todo_app/components/todo_edit/todo_edit_view.dart';
 import 'package:simple_todo_app/configs/const_text.dart';
 import 'package:simple_todo_app/models/todo.dart';
 
@@ -8,6 +9,12 @@ class TodoListView extends StatefulWidget {
 }
 
 class _TodoListView extends State<TodoListView> {
+
+  _moveToEditView() => Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => TodoEditView())
+  );
+
   @override 
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +30,7 @@ class _TodoListView extends State<TodoListView> {
           
           return Card(
             child: ListTile(
-              onTap: (){},
+              onTap: (){ _moveToEditView(); },
               title: Text("${todo.title}"),
               subtitle: Text("${todo.note}"),
               trailing: Text("${todo.dueDate.toLocal().toString()}"),
@@ -31,6 +38,10 @@ class _TodoListView extends State<TodoListView> {
             )
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){ _moveToEditView(); },
+        child: Icon(Icons.add, size: 40),
       ),
     );
   }
