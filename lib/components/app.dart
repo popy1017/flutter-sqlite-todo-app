@@ -1,6 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_todo_app/configs/const_text.dart';
+import 'package:simple_todo_app/repositories/todo_bloc.dart';
 
 import 'todo_list/todo_list_view.dart';
 
@@ -16,7 +18,11 @@ class TodoApp extends StatelessWidget {
       darkTheme: ThemeData(
         brightness: Brightness.dark
       ),
-      home: TodoListView(),
+      home: Provider<TodoBloc>(
+        create: (context) => new TodoBloc(),
+        dispose: (context, bloc) => bloc.dispose(),
+        child: TodoListView()
+      ),
     );
   }
 }

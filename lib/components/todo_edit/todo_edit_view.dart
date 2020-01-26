@@ -2,15 +2,17 @@ import 'package:datetime_picker_formfield/datetime_picker_formfield.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_todo_app/configs/const_text.dart';
+import 'package:simple_todo_app/models/todo.dart';
+import 'package:simple_todo_app/repositories/todo_bloc.dart';
 
-class TodoEditView extends StatefulWidget {
-  @override 
-  _TodoEditView createState() => _TodoEditView();
-}
-
-class _TodoEditView extends State<TodoEditView> {
+class TodoEditView extends StatelessWidget {
 
   final DateFormat _format = DateFormat("yyyy-MM-dd HH:mm");
+
+  final TodoBloc todoBloc;
+  final Todo todo;
+
+  TodoEditView({Key key, @required this.todoBloc, @required this.todo});
 
   @override 
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class _TodoEditView extends State<TodoEditView> {
             _titleTextFormField(),
             _dueDateTimeFormField(),
             _noteTextFormField(),
-            _confirmButton()
+            _confirmButton(context)
           ],
         ),
       )
@@ -32,14 +34,20 @@ class _TodoEditView extends State<TodoEditView> {
 
   Widget _titleTextFormField() => TextFormField(
     decoration: InputDecoration(labelText: "タイトル"),
-    initialValue: "",
+    initialValue: todo.title,
+    onChanged: _setTitle,
   );
+  
+  void _setTitle(String title) {
+    todo.title = title;
+  }
 
   // ↓ https://pub.dev/packages/datetime_picker_formfield のサンプルから引用
   Widget _dueDateTimeFormField() => DateTimeField(
     format: _format,
     decoration: InputDecoration(labelText: "締切日"),
-    initialValue: DateTime.now(),
+    initialValue: todo.dueDate ?? DateTime.now(),
+    onChanged: _setDueDate,
     onShowPicker: (context, currentValue) async {
       final date = await showDatePicker(
         context: context,
@@ -58,20 +66,35 @@ class _TodoEditView extends State<TodoEditView> {
       }
     }
   );
+ 
+  void _setDueDate(DateTime dt) {
+    todo.dueDate = dt;
+  }
 
   Widget _noteTextFormField() => TextFormField(
     decoration: InputDecoration(labelText: "メモ"),
-    initialValue: "",
+    initialValue: todo.note,
     maxLines: 3,
+    onChanged: _setNote,
   );
 
-  Widget _confirmButton() => RaisedButton.icon(
+  void _setNote(String note) {
+    todo.note = note;
+  }
+
+  Widget _confirmButton(BuildContext context) => RaisedButton.icon(
     icon: Icon(
       Icons.tag_faces,
       color: Colors.white,
     ),
     label: Text("作成"),
     onPressed: () { 
+      if (todo.id == null) {
+        todoBloc.create(todo);
+      } else {
+        todoBloc.update(todo);
+      }
+      
       Navigator.of(context).pop();
     },
     shape: StadiumBorder(),

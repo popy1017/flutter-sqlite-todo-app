@@ -30,7 +30,8 @@ dependencies:
   intl: ^0.16.0
   datetime_picker_formfield: ^1.0.0
 
-
+  provider: ^4.0.2
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter
