@@ -13,6 +13,12 @@ class Todo {
     note = "";
   }
 
+  Todo clone() {
+    Todo newTodo = Todo(title, dueDate, note);
+    newTodo.id = id;
+    return newTodo;
+  }
+
   assignUUID() {
     id = Uuid().v4();
   }

@@ -11,8 +11,14 @@ class TodoEditView extends StatelessWidget {
 
   final TodoBloc todoBloc;
   final Todo todo;
+  Todo _newTodo;
 
-  TodoEditView({Key key, @required this.todoBloc, @required this.todo});
+  TodoEditView({Key key, @required this.todoBloc, @required this.todo}){
+    // Dartでは参照渡しが行われるため、todoをそのまま編集してしまうと、
+    // 更新せずにリスト画面に戻ったときも値が更新されてしまうため、
+    // 新しいインスタンスを作る
+    _newTodo = todo.clone();
+  }
 
   @override 
   Widget build(BuildContext context) {
@@ -34,19 +40,19 @@ class TodoEditView extends StatelessWidget {
 
   Widget _titleTextFormField() => TextFormField(
     decoration: InputDecoration(labelText: "タイトル"),
-    initialValue: todo.title,
+    initialValue: _newTodo.title,
     onChanged: _setTitle,
   );
   
   void _setTitle(String title) {
-    todo.title = title;
+    _newTodo.title = title;
   }
 
   // ↓ https://pub.dev/packages/datetime_picker_formfield のサンプルから引用
   Widget _dueDateTimeFormField() => DateTimeField(
     format: _format,
     decoration: InputDecoration(labelText: "締切日"),
-    initialValue: todo.dueDate ?? DateTime.now(),
+    initialValue: _newTodo.dueDate ?? DateTime.now(),
     onChanged: _setDueDate,
     onShowPicker: (context, currentValue) async {
       final date = await showDatePicker(
@@ -68,18 +74,18 @@ class TodoEditView extends StatelessWidget {
   );
  
   void _setDueDate(DateTime dt) {
-    todo.dueDate = dt;
+    _newTodo.dueDate = dt;
   }
 
   Widget _noteTextFormField() => TextFormField(
     decoration: InputDecoration(labelText: "メモ"),
-    initialValue: todo.note,
+    initialValue: _newTodo.note,
     maxLines: 3,
     onChanged: _setNote,
   );
 
   void _setNote(String note) {
-    todo.note = note;
+    _newTodo.note = note;
   }
 
   Widget _confirmButton(BuildContext context) => RaisedButton.icon(
@@ -89,10 +95,10 @@ class TodoEditView extends StatelessWidget {
     ),
     label: Text("作成"),
     onPressed: () { 
-      if (todo.id == null) {
-        todoBloc.create(todo);
+      if (_newTodo.id == null) {
+        todoBloc.create(_newTodo);
       } else {
-        todoBloc.update(todo);
+        todoBloc.update(_newTodo);
       }
       
       Navigator.of(context).pop();
