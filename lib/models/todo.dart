@@ -6,9 +6,7 @@ class Todo {
   DateTime dueDate;
   String note;
 
-  Todo(this.title, this. dueDate, this.note) {
-    this.id = this.assignUUID();
-  }
+  Todo(this.title, this. dueDate, this.note);
   Todo.newTodo() {
     title = "";
     dueDate = DateTime.now();

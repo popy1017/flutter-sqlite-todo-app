@@ -20,25 +20,13 @@ class TodoListView extends StatelessWidget {
             return ListView.builder(
               itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, int index) {
+                
                 Todo todo = snapshot.data[index];
+
                 return Dismissible(
                   key: Key(todo.id),
-                  background: Container(
-                    alignment: Alignment.centerLeft,
-                    color: Colors.green,
-                    child: Padding( 
-                      padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
-                      child: Icon(Icons.done, color: Colors.white),
-                    )
-                  ),
-                  secondaryBackground: Container(
-                    alignment: Alignment.centerRight,
-                    color: Colors.green,
-                    child: Padding( 
-                      padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
-                      child: Icon(Icons.done, color: Colors.white),
-                    )
-                  ),
+                  background: _backgroundOfDismissible(),
+                  secondaryBackground: _secondaryBackgroundOfDismissible(),
                   onDismissed: (direction) {
                     _bloc.delete(todo.id);
                   },
@@ -75,5 +63,23 @@ class TodoListView extends StatelessWidget {
   _moveToCreateView(BuildContext context, TodoBloc bloc) => Navigator.push(
     context,
     MaterialPageRoute(builder: (context) => TodoEditView(todoBloc: bloc, todo: Todo.newTodo()))
+  );
+
+  _backgroundOfDismissible() => Container(
+    alignment: Alignment.centerLeft,
+    color: Colors.green,
+    child: Padding( 
+      padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+      child: Icon(Icons.done, color: Colors.white),
+    )
+  );
+
+  _secondaryBackgroundOfDismissible() => Container(
+    alignment: Alignment.centerRight,
+    color: Colors.green,
+    child: Padding( 
+      padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
+      child: Icon(Icons.done, color: Colors.white),
+    )
   );
 }
