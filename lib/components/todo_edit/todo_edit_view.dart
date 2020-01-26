@@ -11,13 +11,16 @@ class TodoEditView extends StatelessWidget {
 
   final TodoBloc todoBloc;
   final Todo todo;
-  Todo _newTodo;
+  final Todo _newTodo = Todo.newTodo();
 
   TodoEditView({Key key, @required this.todoBloc, @required this.todo}){
     // Dartでは参照渡しが行われるため、todoをそのまま編集してしまうと、
     // 更新せずにリスト画面に戻ったときも値が更新されてしまうため、
     // 新しいインスタンスを作る
-    _newTodo = todo.clone();
+    _newTodo.id = todo.id;
+    _newTodo.title = todo.title;
+    _newTodo.dueDate = todo.dueDate;
+    _newTodo.note = todo.note;
   }
 
   @override 
