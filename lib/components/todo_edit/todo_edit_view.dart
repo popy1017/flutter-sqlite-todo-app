@@ -96,7 +96,7 @@ class TodoEditView extends StatelessWidget {
       Icons.tag_faces,
       color: Colors.white,
     ),
-    label: Text("作成"),
+    label: Text("決定"),
     onPressed: () { 
       if (_newTodo.id == null) {
         todoBloc.create(_newTodo);
