@@ -21,16 +21,38 @@ class TodoListView extends StatelessWidget {
               itemCount: snapshot.data.length,
               itemBuilder: (BuildContext context, int index) {
                 Todo todo = snapshot.data[index];
-                return Card(
-                  child: ListTile(
-                    onTap: (){ 
-                      _moveToEditView(context, _bloc, todo); 
-                    },
-                    title: Text("${todo.title}"),
-                    subtitle: Text("${todo.note}"),
-                    trailing: Text("${todo.dueDate.toLocal().toString()}"),
-                    isThreeLine: true,
-                  )
+                return Dismissible(
+                  key: Key(todo.id),
+                  background: Container(
+                    alignment: Alignment.centerLeft,
+                    color: Colors.green,
+                    child: Padding( 
+                      padding: EdgeInsets.fromLTRB(20, 0, 0, 0),
+                      child: Icon(Icons.done, color: Colors.white),
+                    )
+                  ),
+                  secondaryBackground: Container(
+                    alignment: Alignment.centerRight,
+                    color: Colors.green,
+                    child: Padding( 
+                      padding: EdgeInsets.fromLTRB(0, 0, 20, 0),
+                      child: Icon(Icons.done, color: Colors.white),
+                    )
+                  ),
+                  onDismissed: (direction) {
+                    _bloc.delete(todo.id);
+                  },
+                  child: Card(
+                    child: ListTile(
+                      onTap: (){ 
+                        _moveToEditView(context, _bloc, todo); 
+                      },
+                      title: Text("${todo.title}"),
+                      subtitle: Text("${todo.note}"),
+                      trailing: Text("${todo.dueDate.toLocal().toString()}"),
+                      isThreeLine: true,
+                    )
+                  ),
                 );
               },
             );
